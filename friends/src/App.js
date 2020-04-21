@@ -12,8 +12,8 @@ function App() {
     <Router>
       <div className="App">
         <div className='navbar'>
-          <Link to='/login'>login</Link>
-          <Link to="/protected">Protected Page</Link>
+          <Link to='/login'>Login</Link>
+          <Link to="/protected">Friends List</Link>
         </div>
         <Switch>
           <PrivateRoute exact path="/protected" component={FriendsList} />
