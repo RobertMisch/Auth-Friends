@@ -28,6 +28,11 @@ function FriendsList(){
         e.preventDefault()
         setNewFriend({...newFriend, [e.target.name]: e.target.value})
     }
+    const deleteFriend= (id)=>{
+        axiosWithAuth().delete(`/api/friends/${id}`)
+        .then(res => setFriendsList(res.data))
+        .catch(err=>{console.log(err)})
+    }
 
     const getData= ()=>{
     axiosWithAuth()
@@ -71,7 +76,7 @@ function FriendsList(){
             </div>
             {friendsList.map((item)=>{
                 return (
-                    <Friend data={item} key={item.id}/>
+                    <Friend data={item} delete={deleteFriend} key={item.id}/>
                 )
             })}
         </div>
