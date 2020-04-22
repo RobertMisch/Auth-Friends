@@ -1,8 +1,33 @@
 import React, {useState, useEffect} from 'react'
 import {axiosWithAuth} from '../utils/axiosWithAuth'
 
+import Friend from './Friend'
+// import AddFriend from './AddFriend'
+
 function FriendsList(){
     const [friendsList, setFriendsList]= useState([])
+    const [newFriend, setNewFriend]= useState({
+        name:'',
+        age:0,
+        email:''
+    })
+
+    const submitHandler= (e)=>{
+        e.preventDefault()
+        axiosWithAuth()
+        .post('/api/friends', newFriend)
+        .then(res=>{setFriendsList(res.data)})
+        .catch(err=>{console.log(err)})
+        setNewFriend({
+            name:'',
+            age:0,
+            email:''
+        })
+    }
+    const changeHandler= (e)=>{
+        e.preventDefault()
+        setNewFriend({...newFriend, [e.target.name]: e.target.value})
+    }
 
     const getData= ()=>{
     axiosWithAuth()
@@ -18,14 +43,35 @@ function FriendsList(){
     return(
         <div>
             <h1>my friends (auth passed)</h1>
+            <div>
+                <form onSubmit={submitHandler}>
+                    <input 
+                    type="text"
+                    name="name"
+                    value={newFriend.name}
+                    onChange={changeHandler}
+                    >
+                    </input>
+                    <input 
+                    type="number"
+                    name="age"
+                    value={newFriend.age}
+                    onChange={changeHandler}
+                    >
+                    </input>
+                    <input 
+                    type="text"
+                    name="email"
+                    value={newFriend.email}
+                    onChange={changeHandler}
+                    >
+                    </input>
+                    <button type='submit'>Add Friend</button>
+                </form>
+            </div>
             {friendsList.map((item)=>{
                 return (
-                    <div className='friendCard' key={item.id}>
-                        <div>id: {item.id}</div>
-                        <div>name: {item.name}</div>
-                        <div>age: {item.age}</div>
-                        <div>email: {item.email}</div>
-                    </div>
+                    <Friend data={item} key={item.id}/>
                 )
             })}
         </div>
